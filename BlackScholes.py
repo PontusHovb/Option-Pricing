@@ -2,33 +2,57 @@ import numpy as np
 from scipy.stats import norm
 import UserInput
 
-s = UserInput.input_float("s: ")
-K = UserInput.input_float("K: ")
-sigma = UserInput.input_percentage("Sigma (%): ")
-r = UserInput.input_percentage("Risk-free (%): ")
-T = UserInput.input_float("T: ")
-div_yield = UserInput.input_percentage("Dividend yield (%): ")
-print("\n-------------\n")
+class Option:
+    def __init__(self, s, K, T, r, sigma, div_yield, option_type):
+        self.s = s
+        self.K = K
+        self.T = T
+        self.r = r
+        self.sigma = sigma
+        self.div_yield = div_yield
 
-def black_scholes(s, K, T, r, sigma, div_yield):
-    s = s * np.exp(-div_yield * T)
-    # Calculate d1 and d2 parameters
-    d1 = (np.log(s / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
-    d2 = d1 - sigma * np.sqrt(T)
+        if option_type == "call":
+            self.price = self.calculate_option_price()
+        elif option_type == "put":
+            call_price = self.calculate_option_price()
+            self.price = self.put_call_parity(call_price)
+        else:
+            self.price
 
-    print("d1:", round(d1,3), round(norm.cdf(d1),3))
-    print("d2:", round(d2,3), round(norm.cdf(d2),3))
+    def calculate_option_price(self):
+        self.s = self.s * np.exp(-self.div_yield * self.T)
+        
+        # Calculate d1 and d2 parameters
+        d1 = (np.log(self.s / self.K) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
+        d2 = d1 - self.sigma * np.sqrt(self.T)
 
-    # Calculate call option price
-    call_price = (s * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2))
-    return call_price
+        print("d1:", round(d1,3), round(norm.cdf(d1),3))
+        print("d2:", round(d2,3), round(norm.cdf(d2),3))
+
+        # Calculate call option price
+        call_price = (self.s * norm.cdf(d1) - self.K * np.exp(-self.r * self.T) * norm.cdf(d2))
+        return call_price
     
-def put_call_parity(call_price, s, K, T, r, div_yield):
-    s = s * np.exp(-div_yield * T)
-    put_price = K * np.exp(-r*T) + call_price - s
-    return put_price
+    def put_call_parity(self, call_price):
+        self.s = self.s * np.exp(-self.div_yield * self.T)
+        put_price = self.K * np.exp(-self.r*self.T) + call_price - self.s
+        return put_price
 
-call_price = black_scholes(s, K, T, r, sigma, div_yield)
-put_price = put_call_parity(call_price, s, K, T, r, div_yield)
-print("Price of call option: ", round(call_price, 3))
-print("Price of put option: ", round(put_price, 3))
+def main():
+    """
+    s = UserInput.input_float("s: ")
+    K = UserInput.input_float("K: ")
+    sigma = UserInput.input_percentage("Sigma (%): ")
+    r = UserInput.input_percentage("Risk-free (%): ")
+    T = UserInput.input_float("T: ")
+    div_yield = UserInput.input_percentage("Dividend yield (%): ")
+    option_type = UserInput.input_alternative("Type of option (call/put)? ", ["call", "put"])
+    option = Option(s, K, T, r, sigma, div_yield, option_type)
+    print("\n-------------\n")
+    """
+
+    option = Option(100, 100, 5, 0.04, 0.20, 0, "put")
+    print("Price of option:", round(option.price, 3))
+
+if __name__ == '__main__':
+    main()
