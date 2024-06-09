@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.stats import norm
+import matplotlib.pyplot as plt
 import UserInput
 
 class Option:
@@ -18,6 +19,9 @@ class Option:
             self.price = self.put_call_parity(call_price)
         else:
             self.price
+
+    def __str__():
+        return ""
 
     def calculate_option_price(self):
         self.s = self.s * np.exp(-self.div_yield * self.T)
