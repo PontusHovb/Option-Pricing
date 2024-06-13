@@ -46,6 +46,9 @@ class Option:
         for xi, yi in zip(self.x, self.y):
             plt.plot(xi, yi, color='blue')
 
+        plt.title("Binomial Model")
+        plt.xlabel("Time (years)")
+        plt.ylabel("Price underlying")
         plt.show()
         return f"Price of option: {round(self.option_price, 2)}"
 
@@ -91,7 +94,7 @@ def main():
     option_type = UserInput.input_alternative("Type of option (call/put)? ", ["call", "put"])
     option = Option(price, strike, vol, rf, T, n, option_type)
     """
-    option = Option(100, 100, 0.2, 0.05, 5, 15, "call")
+    option = Option(100, 100, 0.2, 0.05, 5, 10, "call")
 
     print("\n-----------\n")
     print(option)

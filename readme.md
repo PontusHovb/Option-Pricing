@@ -12,6 +12,10 @@ For last time step (step $n$ in time $T$), the option can be exercised and the v
 $$\pi_n (S_T) = \phi(S_T)$$
 where $\phi$ is the payoff function, positive if the option is in-the-money and 0 otherwise.
 
+<img align="left" width="250" src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/BinomialModel_UnderlyingPrice.png"/>  
+In a binomial model, the price in next time step can either go up (with a factor $u$) or down (with a factor $d$). 
+<br clear="all"/>
+
 ### Black-Scholes
 Black-Scholes is a well-known formula for pricing of European Call options, calculating value of options using Black-Scholes can be found in _BlackScholes.py_
 
