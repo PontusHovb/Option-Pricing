@@ -23,9 +23,8 @@ class PriceNode:
             self.has_child = False
             self.up_child = False
             self.down_child = False
-
 class Option:
-    def __init__(self, price, strike, vol, rf, T, n, option_type):
+    def __init__(self, price, strike, vol, rf, T, n, option_type, position_type="long"):
         self.price = price
         self.strike = strike
         self.vol = vol
@@ -33,6 +32,7 @@ class Option:
         self.T = T
         self.n = n
         self.option_type = option_type
+        self.position_type = position_type
 
         self.calculate_variables()
         self.price_tree = PriceNode(False, self.price, self.u, self.d, self.T, 0, self.delta_t)
@@ -51,6 +51,23 @@ class Option:
         plt.ylabel("Price underlying")
         plt.show()
         return f"Price of option: {round(self.option_price, 2)}"
+
+    def __neg__(self):
+        return Option(self.price, self.strike, self.vol, self.rf, self.T, self.n, self.option_type, "short")
+
+    def payoff(self, price):
+        if self.position_type == "long":
+            return self.exercise_long_position(price) - self.option_price
+        elif self.position_type == "short":
+            return -self.exercise_long_position(price) + self.option_price
+
+    def exercise_long_position(self, price):
+        if self.option_type == "call":
+            return max(price - self.strike, 0)
+        elif self.option_type == "put":
+            return max(self.strike - price, 0)
+        else:
+            return 0
 
     def calculate_variables(self):
         self.delta_t = self.T/self.n
@@ -76,12 +93,15 @@ class Option:
     def option_price(self, option_type, price_node, q, disc):
         if price_node.has_child:
             return disc * (q * self.option_price(option_type, price_node.up_child, q, disc) + (1 - q) * self.option_price(option_type, price_node.down_child, q, disc))
-        elif option_type == "call":
-            return max(price_node.price - self.strike, 0)
-        elif option_type == "put":
-            return max(self.strike - price_node.price, 0)
         else:
-            return 0
+            return self.exercise_long_position(price_node.price)
+
+class Stock:
+    def __init__(self, price):
+        self.strike = price
+
+    def payoff(self, price):
+        return price - self.strike
 
 def main():
     """
