@@ -4,42 +4,58 @@ import matplotlib.pyplot as plt
 import UserInput
 
 class Option:
-    def __init__(self, s, K, T, r, sigma, div_yield, option_type):
-        self.s = s
-        self.K = K
+    def __init__(self, price, strike, T, r, sigma, div_yield, option_type, position_type="long"):
+        self.price = price
+        self.strike = strike
         self.T = T
         self.r = r
         self.sigma = sigma
         self.div_yield = div_yield
+        self.option_type = option_type
+        self.position_type = position_type
 
         if option_type == "call":
-            self.price = self.calculate_option_price()
+            self.option_price = self.calculate_option_price()
         elif option_type == "put":
             call_price = self.calculate_option_price()
-            self.price = self.put_call_parity(call_price)
+            self.option_price = self.put_call_parity(call_price)
         else:
-            self.price
+            self.option_price = 0
 
     def __str__():
         return ""
 
+    def __neg__(self):
+        return Option(self.price, self.strike, self.T, self.r, self.sigma, self.div_yield, self.option_type, "short")
+    
+    def payoff(self, price):
+        if self.position_type == "long":
+            return self.exercise_long_position(price) - self.option_price
+        elif self.position_type == "short":
+            return -self.exercise_long_position(price) + self.option_price
+
+    def exercise_long_position(self, price):
+        if self.option_type == "call":
+            return max(price - self.strike, 0)
+        elif self.option_type == "put":
+            return max(self.strike - price, 0)
+        else:
+            return 0
+
     def calculate_option_price(self):
-        self.s = self.s * np.exp(-self.div_yield * self.T)
+        self.price = self.price * np.exp(-self.div_yield * self.T)
         
         # Calculate d1 and d2 parameters
-        d1 = (np.log(self.s / self.K) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
+        d1 = (np.log(self.price / self.strike) + (self.r + 0.5 * self.sigma ** 2) * self.T) / (self.sigma * np.sqrt(self.T))
         d2 = d1 - self.sigma * np.sqrt(self.T)
 
-        print("d1:", round(d1,3), round(norm.cdf(d1),3))
-        print("d2:", round(d2,3), round(norm.cdf(d2),3))
-
         # Calculate call option price
-        call_price = (self.s * norm.cdf(d1) - self.K * np.exp(-self.r * self.T) * norm.cdf(d2))
+        call_price = (self.price * norm.cdf(d1) - self.strike * np.exp(-self.r * self.T) * norm.cdf(d2))
         return call_price
     
     def put_call_parity(self, call_price):
-        self.s = self.s * np.exp(-self.div_yield * self.T)
-        put_price = self.K * np.exp(-self.r*self.T) + call_price - self.s
+        self.price = self.price * np.exp(-self.div_yield * self.T)
+        put_price = self.strike * np.exp(-self.r*self.T) + call_price - self.price
         return put_price
 
 def main():

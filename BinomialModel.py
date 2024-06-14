@@ -96,13 +96,6 @@ class Option:
         else:
             return self.exercise_long_position(price_node.price)
 
-class Stock:
-    def __init__(self, price):
-        self.strike = price
-
-    def payoff(self, price):
-        return price - self.strike
-
 def main():
     """
     price = UserInput.input_float("Price [P]? ")

@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import Stock
 import BinomialModel
+import BlackScholes
 
 class TradingStrategy:
     def __init__(self, options, name):
@@ -38,39 +40,46 @@ class TradingStrategy:
             payoff += option.payoff(price)
         
         return payoff
-    
-def long_straddle(price, vol, rf, T, n):
-    call = BinomialModel.Option(price, price, vol, rf, T, n, "call")
-    put = BinomialModel.Option(price, price, vol, rf, T, n, "put")
+
+def option(price, strike, vol, rf, T, n, div_yield, option_type, pricing_model):
+    if pricing_model == "BinomialModel":
+        return BinomialModel.Option(price, strike, vol, rf, T, n, option_type)
+    elif pricing_model == "BlackScholes":
+        return BlackScholes.Option(price, strike, T, rf, vol, div_yield, option_type)
+
+def long_straddle(price, vol, rf, T, n, pricing_model):
+    call = option(price, price, vol, rf, T, n, 0, "call", pricing_model)
+    put = option(price, price, vol, rf, T, n, 0, "put", pricing_model)
     return TradingStrategy([call, put], "Long Straddle")
 
-def covered_call(price, vol, rf, T, n):
-    stock = BinomialModel.Stock(price)
-    call = -BinomialModel.Option(price, price, vol, rf, T, n, "call")
+def covered_call(price, vol, rf, T, n, pricing_model):
+    stock = Stock.Stock(price)
+    call = option(price, price, vol, rf, T, n, 0, "call", pricing_model)
     return TradingStrategy([stock, -call], "Covered Call")
 
-def bear_put_spread(price, vol, rf, T, n):
-    put_higher_strike = BinomialModel.Option(price, price+20, vol, rf, T, n, "put")
-    put_lower_strike = BinomialModel.Option(price, price-20, vol, rf, T, n, "put")
+def bear_put_spread(price, vol, rf, T, n, pricing_model):
+    put_higher_strike = option(price, price+20, vol, rf, T, n, 0, "put", pricing_model)
+    put_lower_strike = option(price, price-20, vol, rf, T, n, 0, "put", pricing_model)
     return TradingStrategy([put_higher_strike, -put_lower_strike], "Bear put Spread")
 
-def long_call_butterfly_spread(price, vol, rf, T, n):
-    call_in_the_money = BinomialModel.Option(price, price-40, vol, rf, T, n, "call")
-    call_at_the_money = BinomialModel.Option(price, price, vol, rf, T, n, "call")
-    call_out_of_the_money = BinomialModel.Option(price, price+40, vol, rf, T, n, "call")
+def long_call_butterfly_spread(price, vol, rf, T, n, pricing_model):
+    call_in_the_money = option(price, price-40, vol, rf, T, n, 0, "call", pricing_model)
+    call_at_the_money = option(price, price, vol, rf, T, n, 0, "call", pricing_model)
+    call_out_of_the_money = option(price, price+40, vol, rf, T, n, 0, "call", pricing_model)
     return TradingStrategy([call_in_the_money, -call_at_the_money, -call_at_the_money, call_out_of_the_money], "Long Call Butterfly Spread")
 
 def main():
+    pricing_model = "BinomialModel"
     price = 100
     vol = 0.2
     rf = 0.05
     T = 5
     n = 10
 
-    print(long_straddle(price, vol, rf, T, n))
-    print(covered_call(price, vol, rf, T, n))
-    print(bear_put_spread(price, vol, rf, T, n))
-    print(long_call_butterfly_spread(price, vol, rf, T, n))
+    print(long_straddle(price, vol, rf, T, n, pricing_model))
+    print(covered_call(price, vol, rf, T, n, pricing_model))
+    print(bear_put_spread(price, vol, rf, T, n, pricing_model))
+    print(long_call_butterfly_spread(price, vol, rf, T, n, pricing_model))
 
 if __name__ == "__main__":
     main()
