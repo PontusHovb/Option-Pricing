@@ -9,7 +9,9 @@ $$\pi_n (S_T) = \phi(S_T)$$ where $\phi$ is the payoff function, positive if the
 <br clear="all"/>
 
 ## Black-Scholes
-Black-Scholes is a well-known formula for pricing of European Call options, calculating value of options using Black-Scholes can be found in _BlackScholes.py_
+<img align="left" width="300" src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/BlackScholes_OptionPrice.png"/>  
+Black-Scholes is a well-known formula for pricing of options, and descibes the relation between the input parameters (current stock price, strike price, volatiility, risk-free rate and time to expiration). The plot to the left visualises the relation between underlying stock price, time to expiration and the price of an European call option.
+<br clear="all"/>
 
 ### European Options
 European options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on a**_ specific date (expiration date). 
