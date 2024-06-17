@@ -59,15 +59,19 @@ class Option:
         else:
             return 0
 
-    def calculate_option_price(self, price, T, option_type):
-        price = price * np.exp(-self.div_yield * T)
-        
+    def calculate_d1_d2(self, price, T):
         # Calculate d1 and d2 parameters
         d1 = (np.log(price/ self.strike) + (self.r + 0.5 * self.sigma ** 2) * T) / (self.sigma * np.sqrt(T))
         d2 = d1 - self.sigma * np.sqrt(T)
+        return d1, d2
+
+    def calculate_option_price(self, price, T, option_type):
+        price = price * np.exp(-self.div_yield * T)
+        
+        d1, d2 = self.calculate_d1_d2(price, T)
 
         # Calculate call option price
-        call_price = (price* norm.cdf(d1) - self.strike * np.exp(-self.r * T) * norm.cdf(d2))
+        call_price = (price * norm.cdf(d1) - self.strike * np.exp(-self.r * T) * norm.cdf(d2))
 
         if option_type == "call":
             return call_price
@@ -78,6 +82,25 @@ class Option:
         price = price * np.exp(-self.div_yield * T)
         put_price = self.strike * np.exp(-self.r*T) + call_price - price
         return put_price
+    
+    def first_order_greeks(self):
+        d1, d2 = self.calculate_d1_d2(self.price, self.T)
+        if self.option_type == 'call':
+            delta = norm.cdf(d1)  
+        elif self.option_type == 'put':
+            delta = norm.cdf(d1) - 1
+        gamma = norm.pdf(d1) / (self.price * self.sigma * np.sqrt(self.T))
+        vega = self.price * norm.pdf(d1) * np.sqrt(self.T)
+        if self.option_type == 'call':
+            theta = (self.sigma * self.price * norm.pdf(d1)) / (2*np.sqrt(self.T)) + self.r * self.strike * np.exp(-self.r * self.T) * norm.cdf(d2)
+        elif self.option_type == 'put':
+            theta = (self.sigma * self.price * norm.pdf(d1)) / (2*np.sqrt(self.T)) - self.r * self.strike * np.exp(-self.r * self.T) * norm.cdf(d2)
+        if self.option_type == 'call':
+            rho = self.T * self.strike * np.exp(-self.r * self.T) * norm.pdf(d2)  
+        elif self.option_type == 'put':
+            rho = - self.T * self.strike * np.exp(-self.r * self.T) * norm.pdf(-d2)
+
+        return delta, gamma, vega, theta, rho
 
 def main():
     """
@@ -93,6 +116,8 @@ def main():
     """
 
     option = Option(100, 100, 3, 0.04, 0.20, 0, "put")
+    delta, gamma, vega, theta, rho = option.first_order_greeks()
+    print(delta, gamma, vega, theta, rho)
     print(option)
 
 if __name__ == '__main__':
