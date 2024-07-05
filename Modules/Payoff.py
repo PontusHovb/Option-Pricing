@@ -33,4 +33,3 @@ def show_payoff(strategy, options, start, end):
     plt.xlabel("Price underlying")
     plt.ylabel("Payoff")
     plt.show()
-    return ""
