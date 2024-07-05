@@ -10,7 +10,7 @@ class Stock:
     def __init__(self, ticker, date=str(date.today())):
         self.ticker = ticker
         self.stock = yf.Ticker(self.ticker)
-        self.strike = self.get_close_price(date)
+        self.current_price = self.get_close_price(date)
 
     def __str__(self):
         stock_df = self.get_stock_history(np.datetime64(date.today()), GRAPH_DAYS)

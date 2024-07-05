@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import Stock
-import BinomialModel
-import BlackScholes
+import Modules.Stock as Stock
+import Modules.BinomialModel as BinomialModel
+import Modules.BlackScholes as BlackScholes
 
 class TradingStrategy:
     def __init__(self, options, name):

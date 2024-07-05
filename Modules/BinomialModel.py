@@ -1,5 +1,6 @@
 import math
 import matplotlib.pyplot as plt
+
 import UserInput
 
 class PriceNode:

@@ -2,6 +2,7 @@ import numpy as np
 import math
 from scipy.stats import norm
 import matplotlib.pyplot as plt
+
 import UserInput
 
 class Option:
