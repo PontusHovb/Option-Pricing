@@ -24,19 +24,19 @@ class PriceNode:
             self.up_child = False
             self.down_child = False
 class Option:
-    def __init__(self, price, strike, vol, rf, T, n, option_type, position_type="long"):
-        self.price = price
-        self.strike = strike
-        self.vol = vol
-        self.rf = rf
-        self.T = T
-        self.n = n
+    def __init__(self, option_type, asset_price, strike, T, rf, vol, n, position_type="long"):
         self.option_type = option_type
+        self.asset_price = asset_price
+        self.strike = strike
+        self.T = T
+        self.rf = rf
+        self.vol = vol
+        self.n = n
         self.position_type = position_type
 
         self.calculate_variables()
-        self.price_tree = PriceNode(False, self.price, self.u, self.d, self.T, 0, self.delta_t)
-        self.option_price = self.option_price(self.option_type, self.price_tree, self.q, self.discount)
+        self.price_tree = PriceNode(False, self.asset_price, self.u, self.d, self.T, 0, self.delta_t)
+        self.price = self.calculate_price(self.option_type, self.price_tree, self.q, self.discount)
 
     def __str__(self):
         self.x = []
@@ -50,22 +50,22 @@ class Option:
         plt.xlabel("Time (years)")
         plt.ylabel("Price underlying")
         plt.show()
-        return f"Price of option: {round(self.option_price, 2)}"
+        return f"Price of option: {round(self.price, 2)}"
 
     def __neg__(self):
-        return Option(self.price, self.strike, self.vol, self.rf, self.T, self.n, self.option_type, "short")
+        return Option(self.option_type, self.asset_price, self.strike, self.T, self.rf, self.vol, self.n, position_type="short")
 
-    def payoff(self, price):
+    def payoff(self, asset_price):
         if self.position_type == "long":
-            return self.exercise_long_position(price) - self.option_price
+            return self.exercise_long_position(asset_price) - self.price
         elif self.position_type == "short":
-            return -self.exercise_long_position(price) + self.option_price
+            return -self.exercise_long_position(asset_price) + self.price
 
-    def exercise_long_position(self, price):
+    def exercise_long_position(self, asset_price):
         if self.option_type == "call":
-            return max(price - self.strike, 0)
+            return max(asset_price - self.strike, 0)
         elif self.option_type == "put":
-            return max(self.strike - price, 0)
+            return max(self.strike - asset_price, 0)
         else:
             return 0
 
@@ -90,9 +90,9 @@ class Option:
             self.create_price_tree(price_node.up_child)
             self.create_price_tree(price_node.down_child)
 
-    def option_price(self, option_type, price_node, q, disc):
+    def calculate_price(self, option_type, price_node, q, disc):
         if price_node.has_child:
-            return disc * (q * self.option_price(option_type, price_node.up_child, q, disc) + (1 - q) * self.option_price(option_type, price_node.down_child, q, disc))
+            return disc * (q * self.calculate_price(option_type, price_node.up_child, q, disc) + (1 - q) * self.calculate_price(option_type, price_node.down_child, q, disc))
         else:
             return self.exercise_long_position(price_node.price)
 
@@ -107,10 +107,8 @@ def main():
     option_type = UserInput.input_alternative("Type of option (call/put)? ", ["call", "put"])
     option = Option(price, strike, vol, rf, T, n, option_type)
     """
-    option = Option(100, 100, 0.2, 0.05, 5, 10, "call")
-
-    print("\n-----------\n")
-    print(option)
+    option = Option("call", asset_price=100, strike=100, T=0.01, rf=0.04, vol=0.3, n=20)
+    print(option.price)
 
 if __name__ == "__main__":
     main()
