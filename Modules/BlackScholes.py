@@ -3,7 +3,7 @@ import math
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 
-import UserInput
+import Modules.UserInput
 
 class Option:
     def __init__(self, option_type, asset_price, strike, T, r, div_yield=0, sigma=None, price=None, position_type="long"):

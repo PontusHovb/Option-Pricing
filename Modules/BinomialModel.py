@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 
-import UserInput
+import Modules.UserInput
 
 class PriceNode:
     def __init__(self, parent_node, price, u, d, T, time, delta_t):
