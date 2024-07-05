@@ -1,24 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+PLOT_DISTANCE = 10              # Distance between points in plot
+
 def calculate_payoff(price, options):
     payoff = 0
     for option in options:
         payoff += option.payoff(price)
     return payoff
 
-def show_payoff(strategy, options):
+def show_payoff(strategy, options, start, end):
     x = []
     y = []
 
-    x.append(0)
-    y.append(calculate_payoff(0, options))
     # Add strike price for all options to plot
     for option in options:
         x.append(option.strike)
         y.append(calculate_payoff(option.strike, options))
-        x.append(option.strike*2)
-        y.append(calculate_payoff(option.strike*2, options))
+        
+    # Add points to plot
+    for price in range(start, end, PLOT_DISTANCE):
+        x.append(price)
+        y.append(calculate_payoff(price, options))
 
     combined = list(zip(x, y))
     combined_sorted = sorted(combined)
