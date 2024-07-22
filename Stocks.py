@@ -3,12 +3,12 @@ import yfinance as yf
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import date
+from datetime import date, timedelta
 
 GRAPH_DAYS = 500
 MAX_DAYS_STOCK_HISTORY = 10
 
-GBG_TIME_STEP = 0.1
+GBG_TIME_STEP = 0.01
 GBG_NUM_PATHS = 50
 
 class Stock:
@@ -77,6 +77,17 @@ class GeometricBrownianMotion:
         self.times = np.linspace(0, T, self.num_steps)
         self.paths = np.zeros((self.num_steps, self.num_paths))
 
+    def __str__(self):
+        self.get_paths()
+        plt.figure(figsize=(9, 6))
+        for i in range(self.num_paths):
+            plt.plot(self.times, self.paths[:, i], color='cornflowerblue', lw=0.5)
+        plt.title('Geometric Brownian Motion Paths')
+        plt.xlabel('Time')
+        plt.ylabel('Price')
+        plt.show()
+        return f"Displayed {self.num_paths} Geometric Brownian Motion paths."
+
     def get_paths(self):
         self.paths[0] = self.S0
 
@@ -86,14 +97,41 @@ class GeometricBrownianMotion:
             self.paths[1:, i] = self.S0 * np.exp((self.mu - 0.5 * self.sigma**2) * self.times[1:] + self.sigma * cumulative_dW)
 
         return self.paths
+
+def plot_stock_and_gbm(stock, gbm):
+    # Get historical prices
+    closing_prices = stock.get_close_prices(np.datetime64(stock.as_of_date), GRAPH_DAYS)
     
+    # Get GBM paths
+    gbm_paths = gbm.get_paths()
+    last_date = closing_prices.index[-1]
+    future_times = [last_date + timedelta(days=int(t*365)) for t in gbm.times]
+    
+    # Plot historical prices
+    plt.figure(figsize=(12, 8))
+    plt.plot(closing_prices.index, closing_prices['Price'], label='Historical Prices', color='blue')
+
+    # Plot GBM paths
+    for i in range(gbm.num_paths):
+        plt.plot(future_times, gbm_paths[:, i], color='cornflowerblue', lw=0.5)
+    
+    plt.title(f"{stock.stock.info.get('longName')} Stock Price (Historical and Simulated)")
+    plt.xlabel("Date")
+    plt.ylabel("Price")
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+
 def main():
     stock = Stock('AAPL')
     #print(stock)
 
     brownian_motion = GeometricBrownianMotion(stock.price, stock.mu(365), stock.vol(365), 1)
-    print(brownian_motion.get_paths()[:, 1])
-    print(brownian_motion.get_paths()[:, 2])
+    #print(brownian_motion)
+
+    plot_stock_and_gbm(stock, brownian_motion)
 
 if __name__ == '__main__':
     main()
