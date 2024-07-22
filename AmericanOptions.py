@@ -1,7 +1,13 @@
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
+import sys
 
+with open('stocks.txt', 'r') as file:
+    moduledir = file.read().strip()
+if moduledir not in sys.path: 
+    sys.path.append(moduledir)
+    
 import Stocks
 
 class LongstaffSchwartz:
