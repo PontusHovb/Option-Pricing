@@ -4,5 +4,5 @@ This project focuses on pricing of European options. European options are option
 ## Trading Strategies
 In this notebook a few of the most popular option trading strategies are implemented (Long Straddle, Covered Call, Bear Put Spread, Long Call Butterfly Spead) showing their respective payoff-functions.
 
-## Realized Volatility
-In the simplest version of option pricing for traded stocks realized volatility is used as an estimate for future volatility. Here, convergence of pricing in binomial model to Black-Scholes is shown.
+## Option Theory
+In this notebook, some important concepts in option pricing are shown such as convergence of option price in binomial model to Black-Scholes, put-call parity, price of american options compared to european.
