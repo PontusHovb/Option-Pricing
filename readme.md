@@ -11,30 +11,30 @@ European options are options that gives the buyer right, but not the obligation 
 ## Trading Strategies
 In this notebook a few of the most popular option trading strategies are implemented (Long Straddle, Covered Call, Bear Put Spread, Long Call Butterfly Spead) showing their respective payoff-functions.
 <p align="center">
-    <img src="https://github.com/PontusHovb/Option-Pricing/blob/main/Images/TradingStrategies1.png" width="400"/>
+    <img src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/TradingStrategies1.png" width="800"/>
 </p>
 <p align="center"><i>Bear Put Spread (left) and Covered Call (right)</i></p>
 <p align="center">
-    <img src="https://github.com/PontusHovb/Option-Pricing/blob/main/Images/TradingStrategies12.png" width="400"/>
+    <img src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/TradingStrategies2.png" width="800"/>
 </p>
 <p align="center"><i>Long Straddle (left) and Long Call Butterfly (right)</i></p>
 
 ## Option Theory
 In this notebook, some important concepts in option pricing are shown such as convergence of option price in binomial model to Black-Scholes, put-call parity, price of american options compared to european.
 <p align="center">
-    <img src="https://github.com/PontusHovb/Option-Pricing/blob/main/Images/ConvergenceBinMod.png" width="400"/>
+    <img src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/ConvergenceBinMod.png" width="400"/>
 </p>
 <p align="center"><i>Convergence of Binomial Model price to Black-Scholes price with increasing no. of steps</i></p>
 With smaller timte steps, the option price using binomial model will convergence to the price from Black-Scholes.
 
 <p align="center">
-    <img src="https://github.com/PontusHovb/Option-Pricing/blob/main/Images/GBM.png" width="400"/>
+    <img src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/GBM.png" width="400"/>
 </p>
 <p align="center"><i>Example of GBM (Geometric Brownian Motion) outcomes</i></p>
 By simulating future possible stock movements (using GBM), Longstaff-Schwartz can calculate optimal exercise timing. Since American options can also be exercised before maturity, the expected value and probability of being in-the-money is higher for American options and hence their price is higher.
 
 <p align="center">
-    <img src="https://github.com/PontusHovb/Option-Pricing/blob/main/Images/AmericanOptionPrice.png" width="400"/>
+    <img src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/AmericanOptionPrice.png" width="400"/>
 </p>
 <p align="center"><i>Price of American Option compared to European</i></p>
 
