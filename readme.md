@@ -1,14 +1,15 @@
 # Option Pricing
-This project focuses on different methods for pricing option, focused on european and american options.
+This project focuses on different methods for pricing option, focused on European and American options.
+
+💡 Click on links to find relevant code and/or theory for respective pricing method
 
 ### European Options
-European options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on a**_ specific date (expiration date). 
+European options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on a**_ specific date (expiration date). Both [Binomial Model](https://github.com/PontusHovb/Option-Pricing/blob/master/Theory/BinomialModel.md) and [Black-Scholes](https://github.com/PontusHovb/Option-Pricing/blob/master/Theory/BlackScholes.md) are implemented [here](https://github.com/PontusHovb/Option-Pricing/blob/master/EuropeanOptions.py) to calculate price of European options.
 
 ### American Options
-American options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on or before a**_ specific date (expiration date). 
+American options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on or before a**_ specific date (expiration date). [Longstaff Schwartz](https://github.com/PontusHovb/Option-Pricing/blob/master/Theory/LongstaffSchwartz.md) is implemented [here](https://github.com/PontusHovb/Option-Pricing/blob/master/AmericanOptions.py) to calculate price of American options.
 
-
-## Trading Strategies
+## [Trading Strategies](https://github.com/PontusHovb/Option-Pricing/blob/master/TradingStrategies.ipynb)
 In this notebook a few of the most popular option trading strategies are implemented (Long Straddle, Covered Call, Bear Put Spread, Long Call Butterfly Spead) showing their respective payoff-functions.
 <p align="center">
     <img src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/TradingStrategies1.png" width="800"/>
@@ -19,7 +20,7 @@ In this notebook a few of the most popular option trading strategies are impleme
 </p>
 <p align="center"><i>Long Straddle (left) and Long Call Butterfly (right)</i></p>
 
-## Option Theory
+## [Option Theory](https://github.com/PontusHovb/Option-Pricing/blob/master/OptionTheory.ipynb)
 In this notebook, some important concepts in option pricing are shown such as convergence of option price in binomial model to Black-Scholes, put-call parity, price of american options compared to european.
 <p align="center">
     <img src="https://github.com/PontusHovb/Option-Pricing/blob/master/Images/ConvergenceBinMod.png" width="400"/>
