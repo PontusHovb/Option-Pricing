@@ -4,8 +4,8 @@ This project focuses on different methods for pricing option, focused on europea
 ### European Options
 European options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on a**_ specific date (expiration date). 
 
-### European Options
-European options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on or before a**_ specific date (expiration date). 
+### American Options
+American options are options that gives the buyer right, but not the obligation to buy (call option) or sell (put option) an underlying asset at a specific price (strike price) _**on or before a**_ specific date (expiration date). 
 
 
 ## Trading Strategies
